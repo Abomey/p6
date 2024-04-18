@@ -83,6 +83,12 @@ h1{
 	color: #B1663C
 }
 
+.textalert {
+	color: red;
+
+}
+
+
 h1 > span {
 	font-family: 'Work Sans';
 	font-size:10px;

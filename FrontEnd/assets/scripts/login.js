@@ -26,6 +26,7 @@ async function authenticate($event) {
     } catch (error) {
         const paragraph = document.querySelector("#authentication-error");
         paragraph.textContent = error.message;
+        paragraph.classList.add("textalert");
     }
 
 }
