@@ -2,6 +2,8 @@ const URL = "http://localhost:5678/api";
 
 /**
  * Fonction permettant de récupérer des données depuis l'API.
+ * Envoie une requête GET à l'API pour récupérer des données.
+
  * @param {string} endpoint
  * @returns {Array} Tableau de données
  */
@@ -24,7 +26,10 @@ async function getData(endpoint) {
 
 /**
  * Fonction permettant de supprimer un élément (via l'API).
+ *  Envoie une requête DELETE à l'API pour supprimer un élément en utilisant le jeton d'authentification.
+
  * @param {string} endpoint
+ *
  */
 async function deleteElement(endpoint) {
     // Récupération du jeton d'autorisation.
@@ -37,7 +42,8 @@ async function deleteElement(endpoint) {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
-            })
+            });
+            return response 
         } catch (error) {
             throw Error(`Une erreur est survenue lors de la suppression d'un élément: ${error.message}`);
         }
@@ -47,7 +53,8 @@ async function deleteElement(endpoint) {
     }
 }
 
-// @TODO : Créer la fonction d'envoi d'un élément (work), comme par exemple une méthode postElement
+
+// Envoie une requête POST à l'API pour ajouter un élément en utilisant le jeton d'authentification.
 
 async function postElement(endpoint, data) {
         // Récupération du jeton d'autorisation.
@@ -62,7 +69,12 @@ async function postElement(endpoint, data) {
                     },
                     body: data // Les data correspondent à un formulaire.
                 })
-                return await response.json();
+                let responseCode = response.status;
+                if (responseCode === 201) {
+                    return await response.json(); 
+                }
+                return ""; 
+
             } catch (error) {
                 console.error(error);
             }

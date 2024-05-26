@@ -17,11 +17,12 @@ figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
 	margin: 0;
-	padding: 0;
+	padding: 0; 
 	border: 0;
 	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
+	box-sizing: border-box;
 }
 
 /* HTML5 display-role reset for older browsers */
@@ -32,6 +33,8 @@ footer, header, hgroup, menu, nav, section {
 
 body {
 	line-height: 1;
+	margin: auto;
+    
 }
 ol, ul {
 	list-style: none;
@@ -50,8 +53,8 @@ table {
 }
 /** end reset css**/
 body {
-	max-width: 1440px;
-	margin:auto;
+	overflow-x: hidden;
+	max-width: 2000px;
 	font-family: 'Work Sans' ;
 	font-size: 14px;
 	background-color: #FFFEF8;
@@ -63,11 +66,24 @@ header {
 	margin: 50px 0 0 150px;
 	width: 1140px;
 	height: 42px;
+	
 }
 
 header a {
 	text-decoration: none;
 	margin-right: 30px;
+}
+
+header nav ul li img {
+	width: 19.35px;
+	height: 19.35px;
+	top: 1px;
+	left: 1px;
+	gap: 0px;
+	opacity: 0px;
+	margin-top: 5px;
+
+	
 }
 
 section {
@@ -112,6 +128,12 @@ nav ul {
 nav li {
 	padding: 0 10px;
 	font-size: 1.2em;
+	font-family: Work Sans;
+	font-size: 14px;
+	font-weight: 300;
+	line-height: 16.42px;
+	text-align: left;
+
 	
 }
 
@@ -128,6 +150,7 @@ li:hover {
 	align-items: center;
 	
 	
+	
 }
 #introduction figure {
 	flex: 1
@@ -136,25 +159,34 @@ li:hover {
 }
 #introduction img {
 	display: block;
-	margin: 92px 40px 0 245px;
+	margin: auto;
 	
 	height:355px;
 	width:474px;
 }
 
 #introduction article {
-	
+	margin-left:50px;
+
 	
 	flex: 1
 	
 }
 
+figcaption {
+	margin-top: 7px;
+
+
+}
+
 #introduction h2 {
 	margin-bottom: 1em;
+	margin-top: 80px;
 }
 
 #introduction p {
 	margin-bottom: 0.5em;
+	margin:20px 0px 0px 0px;
 }
 
 #portfolio h2 {
@@ -162,21 +194,26 @@ li:hover {
 	margin-bottom: 1em;
 }
 .gallery {
-	width: 100%;
+	width: 975px;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-column-gap: 20px;
 	grid-row-gap: 20px;
+	margin: auto;
 }
 
 .gallery img {
-	width: 100%;
-
+    width: 305px;
+	height: 407px;
 }
+
+
 #contact {
 	width: 50%;
 	margin: auto;
+	
 }
+
 #contact > * {
 	text-align: center;
 
@@ -189,6 +226,8 @@ li:hover {
 	margin-top:30px;
 	display: flex;
 	flex-direction: column;
+	width:379px;
+	margin: auto;
 }
 
 #contact input {
@@ -266,27 +305,43 @@ footer nav ul {
 	transition: all 0.5s ease;
 }
 
-.filter-btn-active, .btn-admin {
+.filter-btn-active, .btn-admin, .green-button {
 	color: white;
 	background-color: #1D6154;
 }
 
+
+.green-button-disable {
+    background-color: #ccc; /* Couleur de fond grise */
+    color: #888; /* Couleur du texte grise */
+    pointer-events: none; /* Désactivation des événements de pointeur */
+    cursor: not-allowed; /* Curseur non autorisé pour indiquer le statut désactivé */
+}
+
+
 .hidden {
 	display: none;
+	
 }
 
 #edition-header {
+	
 	width: 100%;
 	background-color: black;
 	color: white;
 	text-align: center;
 	padding-block: 1.2rem;
+	
+
+	
+	
 }
 
 #open-modal {
 	color: black;
 	font-size: 0.8rem;
 	cursor: pointer;
+	margin-left: 20px ;
 }
 
 #edition-modal {
@@ -319,7 +374,7 @@ button {
 	font-weight: 700;
 	color: white;
 	background-color: #1D6154;
-	border: 2px solid #1D6154;
+	border: none;
 	margin: 40px auto 0px auto;
 	height: 40px;
 	width: 250px;
@@ -328,27 +383,36 @@ button {
 	
 }
 
+
+
+#button-valider-closemodal {
+	text-decoration: none;
+	background-color: #A7A7A7; 
+    cursor: not-allowed;
+}
+
+
+
 button:hover {
     background-color:#0E2F28;
-	border: 2px solid #0E2F28;
+	border: none;
 	
 }
   
 .modal-gallery {
 	display: flex;
-	justify-content: space-between;
+	justify-content: flex-start;
 	flex-wrap: wrap;
-	width: 410px;
-	margin-top: 50px;
-	margin-left: 100px;
-	
+	margin-left: 90px;
+	margin-right: 90px;
 }
 
 
 .modal-gallery img {
 	width: 75px;
 	height: 100px;
-	margin-bottom: 25px;
+	margin-bottom: 20px;
+	margin-left: 7px;
 	
 }
 
@@ -402,25 +466,6 @@ button:hover {
 	margin: 20px 0px 50px 228px;
 }
 
-/* .add-project {
-
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	font-family: 'Syne';
-	font-weight: 700;
-	color: white;
-	background-color: #1D6154;
-	border: 2px solid #1D6154;
-	margin: 40px auto 0px auto;
-	height: 40px;
-	width: 250px;
-	border-radius: 60px ;
-	text-decoration: none;
-	
-}
-*/
-
 #file {
 	display: none;
 }
@@ -433,19 +478,14 @@ button:hover {
 	background-color: #B3B3B3; 
 	margin:60px 0 0 100px;
 
-	
 }
 
 figure {
 	position: relative;
 	
-
+	
 }
 
-.gallery img {
-    width: 100%;
-	height: 400px;
-}
 
 .fa-trash-can  {
 
@@ -472,6 +512,20 @@ figure {
 	align-items: center;
 }
 
+#preview-img {
+	width: 130px;
+	height: 170px;
+	margin-top: 0px;
+}
+
+#preview-placeholder {
+	width: 70px;
+	height: 61px;
+	margin-top: 15px;
+}
+
+
+
 .add-picture {
 	width: 173px;
 	height: 30px;
@@ -491,22 +545,15 @@ figure {
 
 
 #add-photo-form {
-
-	
 	margin-left: 100px;
 	background: #E8F1F6;
 	width:420px;
 	height: 169px;
 	text-align: center;
-
 }
 
-/*#add-photo-form img{
 
-	
-	
-	
-}*/
+
 
 #add-photo-form p, h4{
 	
@@ -536,6 +583,10 @@ figure {
 	cursor: pointer;
 }
 
+.masked {
+	display: none !important;
+	
+}
 
 
 .form-group-title, .form-group-id {

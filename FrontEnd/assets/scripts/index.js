@@ -1,6 +1,6 @@
 import { getData, deleteElement } from "./api.js";
 import { logout, getToken } from "./authentication.js";
-import { openModal, renderWorksInModal, renderOptions, addDeleteEvents, addFormEvent } from "./modal.js";
+import { openModal, renderWorksInModal, renderOptions, deleteEvents, } from "./modal.js";
 
 
 // Objet global contenant tous les projets et catégories.
@@ -12,7 +12,7 @@ export const data = {
 document.addEventListener("DOMContentLoaded", async () => {
     // Si le jeton d'authentification est présent, on affiche le site en mode édition.
     const token = getToken();
-    token && renderEditionMode();
+    token && renderEditionMode(); // si token est (true), renderEditionMode(), sera exécutée
     try {
         // Récupération des projets.
         data.works = await getWorks();
@@ -50,7 +50,7 @@ export function renderWorks(works) {
  */
 function generateWorkHTML(work) {
     return `			
-    <figure>
+    <figure data-id=${work.id}>
     <img src="${work.imageUrl}" alt="${work.title}">
     <figcaption>${work.title}</figcaption>
     </figure>`;
@@ -157,16 +157,16 @@ function renderEditionMode() {
     openModalButton.style.display = "inline-block";
     openModalButton.addEventListener("click", () => {
         openModal("#edition-modal");
+        
         // (Ré-)affichage des projets au sein de la modale.
         renderWorksInModal(data.works);
-        addDeleteEvents();
+        deleteEvents();
     });
 
     openAddModalButton.addEventListener("click", () => {
         openModal("#add-work-modal");
         renderOptions(data.categories);
-        addFormEvent();
+
     });
 }
-
 

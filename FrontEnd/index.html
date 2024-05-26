@@ -56,10 +56,11 @@
 			</div>
 			<form id="add-work-form" novalidate>
 				<div id="add-photo-form">
-					<img src="./assets/icons/Vector.jpg" alt="img" id="preview-img">
-					<label id="btn-add" for="file">+ Ajouter photo</label>
+					<img src="./assets/icons/Vector.jpg" alt="img" id="preview-img" class="masked">
+					<img src="./assets/icons/Vector.jpg" alt="img" id="preview-placeholder">
+					<label id="btn-add" for="file" >+ Ajouter photo</label>
 					<input class="btn-add-input" type="file" id="file" name="image" accept=".jpg, .png" required>
-					<p>jpg, png : 4mo max</p>
+					<p id="textFileInput">jpg, png : 4mo max</p>
 				</div>
 				<div class="form-group-title">
 					<label for="titre">Titre</label>
@@ -70,7 +71,7 @@
 					<select name="category" class="search-bar" id="categorie-select"></select>
 				</div>
 				<div class="div-separator"></div>
-				<button class="button-valider" type="submit">Valider</button>
+				<button id="button-valider-closemodal" type="submit" disabled>Valider</button>
 			</form>
 		</div>
 	</aside>
@@ -111,19 +112,21 @@
 			<article>
 
 				<h2>Designer d'espace</h2>
-				<p>Je raconte votre histoire, je valorise vos idées. Je vous accompagne de la conception à la livraison
-					finale du chantier.</p>
-				<p>Chaque projet sera étudié en commun, de façon à mettre en valeur les volumes, les matières et les
-					couleurs dans le respect de l’esprit des lieux et le choix adapté des matériaux. Le suivi du
-					chantier sera assuré dans le souci du détail, le respect du planning et du budget.</p>
-				<p>En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG,
+				<p>Je raconte votre histoire, je valorise vos idées. Je vous <br>accompagne de la conception à la livraison
+					finale du <br>chantier.</p>
+				<p>Chaque projet sera étudié en commun, de façon à mettre <br>en valeur les volumes, les matières et les
+					couleurs dans le <br>respect de l’esprit des lieux et le choix adapté des<br> matériaux. Le suivi du
+					chantier sera assuré dans le souci<br> du détail, le respect du planning et du budget.</p>
+				<p>En cas de besoin, une équipe pluridisciplinaire peut-être constituée <br>: architecte DPLG,
 					décorateur(trice)</p>
+					  
 			</article>
+
 		</section>
 
 
 		<section id="portfolio">
-			<h2>Mes Projets <span id="open-modal" class="hidden">(X) Modifier</span></h2>
+			<h2>Mes Projets <span id="open-modal" class="hidden"> <i class="fa-regular fa-pen-to-square"></i> modifier </span></h2>
 
 
 			<div class="filters">

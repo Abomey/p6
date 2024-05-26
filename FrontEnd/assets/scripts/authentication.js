@@ -19,14 +19,16 @@ async function login(email, password) {
     }
 }
 
+
 function logout() {
     localStorage.removeItem("token");
 }
 
-function getToken() {
+//récuperation dans localstorage
+function getToken() {        
     return localStorage.getItem("token");
 }
-
+//defini le jeton dans localstorage
 function setToken(token) {
     localStorage.setItem("token", token);
 }

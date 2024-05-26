@@ -1,7 +1,6 @@
 import { deleteElement, postElement } from "./api.js";
 import { data, getWorks, renderWorks } from "./index.js";
 
-
 /**
  * Fonction générique permettant d'ouvrir une modale à partir de son identifiant et d'ajouter les évènements de fermeture sur les boutons dédiés.
  */
@@ -24,10 +23,30 @@ function openModal(id) {
         });
     })
 
+    // Sélection du bouton "Valider"
+    const validerButton = document.getElementById("button-valider-closemodal");
     
+    // Ajout d'un écouteur d'événements de clic au bouton "Valider"
+    validerButton.addEventListener("click", function() {
+        // Fermeture de la modal en appelant la fonction closeModal avec l'identifiant de la modal
+        closeModal("#add-work-modal");
+        closeModal("#edition-modal")
 
+    });
 }
 
+/**
+ * Fonction permettant de fermer une modale à partir de son identifiant.
+ * @param {string} id Identifiant de la modale à fermer
+ */
+function closeModal(id) {
+    // Récupération de la modale que l'on souhaite fermer.
+    const modal = document.querySelector(id);
+    // Modification de l'affichage pour masquer la modal.
+    modal.style.display = "none";
+    // Rétablissement du scroll
+    document.body.style.overflow = "auto";
+}
 
 /**
  *  Fonction permettant d'afficher les projets au sein de la gallerie de la modale.
@@ -44,12 +63,11 @@ function renderWorksInModal(works) {
     }
 }
 
-
 /**
  *  Fonction permettant de générer le code HTML nécessaire pour afficher un travail spécifique dans la galerie modale
  */
 function generateWorkHTMLInModal(work) {
-    return `<figure>
+    return `<figure data-id=${work.id}>
         <img src="${work.imageUrl}" alt="${work.title}">
         <i class="fa-solid fa-trash-can" data-id=${work.id}></i>
     </figure>`;
@@ -58,47 +76,41 @@ function generateWorkHTMLInModal(work) {
 /**
  * Fonction permettant d'ajouter les évènements de suppression sur les icones de corbeilles.
  */
-function addDeleteEvents() {
+function deleteEvents() {
     const trashes = document.querySelectorAll(".fa-trash-can");
     trashes.forEach(trash => {
         trash.addEventListener("click", async () => {
             const id = trash.dataset.id;
-            try {
-                await deleteWork(id);
-                refreshWorks(data.works);
-            } catch (error) {
-                alert(error.message);
-            }
-          
+            
+            await deleteWork(id);
+            
         })
     })
 }
 
-
-/**
+/*
  * Fonction permettant de supprimer un projet.
  * @param {number} id Identifiant du projet
  */
 async function deleteWork(id) {
-    try {
-        await deleteElement(`/works/${id}`)
-        data.works = data.works.filter(work => work.id !== id);
-    } catch (error) {
-        console.error(error);
-        throw Error("Une erreur est survenue lors de la suppression d'un projet.")
+    
+    const response = await deleteElement(`/works/${id}`);
+
+    if (response.status === 204){
+        data.works = data.works.filter(work => work.id != id);
+        refreshWorks(data.works)
     }
 }
 
-
 /**
- * Fonction permettant de rafraichir la liste des projets (dans la gallerie et la modale).
- * @param {Array} works Tableau de projet à afficher
+ * Fonction permettant de rafraîchir la liste des projets dans la galerie principale et dans la modal.
+ * @param {Array} works Tableau de projets à afficher
  */
 function refreshWorks(works) {
-    renderWorks(works);
-    renderWorksInModal(works);
+    renderWorks(works); // Rafraîchissement de la galerie principale
+    renderWorksInModal(works); // Rafraîchissement de la galerie dans la modal
+    deleteEvents();
 }
-
 
 /**
  * Fonction permettant d'afficher les différentes options de catégorie dans le formulaire d'ajout.
@@ -110,7 +122,6 @@ function renderOptions(categories) {
         const option = generateOptionHTML(category);
         selectElement.innerHTML += option;
     }
-
 }
 
 /**
@@ -126,30 +137,47 @@ function generateOptionHTML(category) {
 async function addProject(formData) {
     // Création un formulaire de données :
     const work = await postElement("/works", formData); // Envoi des données à l'API 
+
     data.works.push(work); // Ajout du projet au tableau de données :
     refreshWorks(data.works);
 }
 
-/**
- * Fonction permettant d'ajouter l'évènement de soumission (pour ajout de projet) au formulaire dédié.
- */
-function addFormEvent() {
-    // Sélection de l'élément avec la classe "modal-content" ( anciennement add-project)
-    const form = document.querySelector("#add-work-form");
-    form.addEventListener("submit", event => {
-        event.preventDefault(); // Pour empêcher le comportement par défaut (soit le rechargement de la page)
-        const formData = new FormData(form);// Création un formulaire de données 
-        addProject(formData).then(() => {
-            form.reset();
-        })
-    });
-    // Sélection de l'élément de formulaire permettant de charger un fichier d'image.
-    const fileInput = document.getElementById("file");
-    // Ajout d'un écouteur d'événements qui déclenche la fonction processImage lorsque l'utilisateur sélectionne un fichier.
-    fileInput.addEventListener("change", () => {
-        processImage(fileInput);
-    });
-}
+
+
+// Sélection de l'élément avec la classe "modal-content" 
+const form = document.querySelector("#add-work-form");
+const handleSubmit = function(event) {
+    event.preventDefault(); // Pour empêcher le comportement par défaut (soit le rechargement de la page)
+    const formData = new FormData(form);// Création un formulaire de données 
+    addProject(formData).then(() => {
+        form.reset();
+
+            // Code de remise à zéro de l'aperçu de l'image
+        const imagePreview = document.getElementById("preview-img"); // Idéalement, donner un id à l'élément img de prévisualisation
+        imagePreview.classList.add("masked");
+
+        const previewplaceholder = document.getElementById("preview-placeholder");
+        previewplaceholder.classList.remove("masked"); // Affiche
+
+        const addButton = document.getElementById("btn-add");
+        const textfileinput = document.getElementById("textFileInput")
+        
+        addButton.classList.remove("masked");
+        textfileinput.classList.remove("hidden");
+
+    })
+
+
+};
+form.addEventListener("submit", handleSubmit);
+
+// Sélection de l'élément de formulaire permettant de charger un fichier d'image.
+const fileInput = document.getElementById("file");
+// Ajout d'un écouteur d'événements qui déclenche la fonction processImage lorsque l'utilisateur sélectionne un fichier.
+fileInput.addEventListener("change", () => {
+    processImage(fileInput);
+});
+    
 
 
 /**
@@ -162,29 +190,75 @@ function processImage(fileInput) {
     const file = fileInput.files[0];
     const maxSize = 4 * 1024 * 1024;
     if (file && file.size > maxSize) {
-        // @TODO : Afficher une erreur si le fichier est trop volumineux.
         errorMessage.textContent = "Le fichier est trop volumineux. Veuillez sélectionner un fichier de taille inférieure à 4 Mo.";
         errorMessage.style.color = "red";
         errorMessage.style.marginTop = "10px";
         document.getElementById("error-message").appendChild(errorMessage);
     } else {
-        const reader = new FileReader();
-        // @TODO : Cacher le bouton d'ajout.
+        let reader = new FileReader();
         const addButton = document.getElementById("btn-add");
-        addButton.style.display = "none";
-        // @TODO : Afficher l'image.
+        const textfileinput = document.getElementById("textFileInput")
+        addButton.classList.add("masked");
+        textfileinput.classList.add("hidden");
+
+       
         reader.addEventListener("load", function(event) {
             const url = event.target.result;
             const image = document.getElementById("preview-img");
+            const previewplaceholder = document.getElementById("preview-placeholder");
             image.src = url;
-            image.style.width = "130px";
-            image.style.height = "170px";
+            image.classList.remove('masked');
+            previewplaceholder.classList.add("masked");
+
+            
         })
+
+
         reader.readAsDataURL(file);
     }
 }
 
 
+/**
+ * Cette fonction est appelée lorsque le DOM est chargé, elle configure les écouteurs d'événements pour mettre à jour l'état du bouton "Valider" en fonction des entrées de l'utilisateur.
+ */
+document.addEventListener("DOMContentLoaded", function() {
+    // Sélection des éléments du formulaire
+    const titleInput = document.querySelector("#add-work-form input[name='title']");
+    const categorySelect = document.querySelector("#add-work-form select[name='category']");
+    const fileInput = document.getElementById("file");
+    const validerButton = document.getElementById("button-valider-closemodal");
 
-export { openModal, renderWorksInModal, renderOptions, addDeleteEvents, addFormEvent };
+    // Fonction pour mettre à jour l'état du bouton en fonction de la saisie dans le champ de titre, la sélection de la catégorie et l'ajout d'une image
+    function updateButtonState() {
+        // Vérification si du texte est saisi dans le champ de titre
+        const isTitleEntered = titleInput.value.trim() !== "";
+        // Vérification si une catégorie est sélectionnée
+        const isCategorySelected = categorySelect.value !== "";
+        // Vérification si un fichier a été ajouté dans le champ d'ajout d'image
+        const isImageAdded = fileInput.files.length > 0;
+
+        // Vérification si toutes les conditions sont remplies pour activer le bouton "Valider"
+        if (isTitleEntered && isCategorySelected && isImageAdded) {
+            // Activation du bouton "Valider"
+            validerButton.style.backgroundColor = "#1D6154"; // Bouton vert
+            validerButton.style.pointerEvents = "auto"; // Activation des événements de pointeur
+            validerButton.style.cursor = "pointer"; // Curseur de pointeur
+            validerButton.disabled = false;
+        } else {
+            // Désactivation du bouton "Valider"
+            validerButton.style.backgroundColor = "#A7A7A7"; // Bouton grisé
+            validerButton.style.pointerEvents = "none"; // Désactivation des événements de pointeur
+            validerButton.style.cursor = "not-allowed"; // Curseur non autorisé
+            validerButton.disabled = true;
+        }
+    }
+
+    // Ajout d'écouteurs d'événements pour les changements dans le champ de titre, le menu déroulant des catégories et le chargement de l'image
+    titleInput.addEventListener("input", updateButtonState); // Événement lors de la saisie dans le champ de titre
+    categorySelect.addEventListener("change", updateButtonState); // Événement lors de la sélection d'une catégorie
+    fileInput.addEventListener("change", updateButtonState); // Événement lors du chargement d'une image
+});
+
+export { openModal, renderWorksInModal, renderOptions, deleteEvents, };
 

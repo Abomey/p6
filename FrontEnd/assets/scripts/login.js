@@ -7,7 +7,10 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 /**
- * 
+ * Récupère l'email et le mot de passe saisis par l'utilisateur.
+ * Appelle la fonction login.
+ * Redirige l'utilisateur vers la page d'accueil en cas de succès.
+ * Affiche un message d'erreur en cas d’échec.
  */
 async function authenticate($event) {
     $event.preventDefault();
@@ -32,7 +35,10 @@ async function authenticate($event) {
 }
 
 /**
- * 
+ * Redirige l'utilisateur vers une page spécifiée.
+ * Affiche un message d'erreur en cas d'échec
+ * Définir la Fonction redirectTo 
+ * Redirige l'utilisateur vers une page spécifiée.
  */
 function redirectTo(destination) {
     window.location.href = destination;
