@@ -23,6 +23,13 @@ function openModal(id) {
         });
     })
 
+    // Ajout de l'événement de clic pour fermer la modal en cliquant en dehors de la modal
+    window.addEventListener("click", function(event) {
+        if (event.target === modal) {
+            closeModal(id);
+        }
+    });
+
     // Sélection du bouton "Valider"
     const validerButton = document.getElementById("button-valider-closemodal");
     
@@ -30,7 +37,7 @@ function openModal(id) {
     validerButton.addEventListener("click", function() {
         // Fermeture de la modal en appelant la fonction closeModal avec l'identifiant de la modal
         closeModal("#add-work-modal");
-        closeModal("#edition-modal")
+        closeModal("#edition-modal");
 
     });
 }
@@ -228,6 +235,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const categorySelect = document.querySelector("#add-work-form select[name='category']");
     const fileInput = document.getElementById("file");
     const validerButton = document.getElementById("button-valider-closemodal");
+    const titleError = document.getElementById("title-error");
 
     // Fonction pour mettre à jour l'état du bouton en fonction de la saisie dans le champ de titre, la sélection de la catégorie et l'ajout d'une image
     function updateButtonState() {
@@ -245,12 +253,20 @@ document.addEventListener("DOMContentLoaded", function() {
             validerButton.style.pointerEvents = "auto"; // Activation des événements de pointeur
             validerButton.style.cursor = "pointer"; // Curseur de pointeur
             validerButton.disabled = false;
+            titleError.style.display = 'none'; // Masquer le message d'erreur
         } else {
             // Désactivation du bouton "Valider"
             validerButton.style.backgroundColor = "#A7A7A7"; // Bouton grisé
             validerButton.style.pointerEvents = "none"; // Désactivation des événements de pointeur
             validerButton.style.cursor = "not-allowed"; // Curseur non autorisé
+            titleError.style.display = 'none'; // Masquer le message d'erreur
             validerButton.disabled = true;
+            // Afficher le message d'erreur si le titre est vide
+            if (!isTitleEntered) {
+                titleError.style.display = 'inline';
+            } else {
+                titleError.style.display = 'none';
+            }
         }
     }
 
@@ -258,6 +274,9 @@ document.addEventListener("DOMContentLoaded", function() {
     titleInput.addEventListener("input", updateButtonState); // Événement lors de la saisie dans le champ de titre
     categorySelect.addEventListener("change", updateButtonState); // Événement lors de la sélection d'une catégorie
     fileInput.addEventListener("change", updateButtonState); // Événement lors du chargement d'une image
+    
+    // Initialiser l'état du bouton et vérifier les champs au chargement de la page
+    updateButtonState();
 });
 
 export { openModal, renderWorksInModal, renderOptions, deleteEvents, };
