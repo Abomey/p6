@@ -20,14 +20,42 @@ function openModal(id) {
             modal.style.display = "none";
             // Rétablissement du scroll
             document.body.style.overflow = "auto";
+
+            const imagePreview = document.getElementById("preview-img"); // Idéalement, donner un id à l'élément img de prévisualisation
+            imagePreview.classList.add("masked");
+
+            imagePreview.src = ""; // Réinitialiser la source de l'image de prévisualisation
+            const previewplaceholder = document.getElementById("preview-placeholder");
+            previewplaceholder.classList.remove("masked"); // Affiche
+            const addButton = document.getElementById("btn-add");
+            const textfileinput = document.getElementById("textFileInput")
+            
+            addButton.classList.remove("masked");
+            textfileinput.classList.remove("hidden");
         });
     })
 
     // Ajout de l'événement de clic pour fermer la modal en cliquant en dehors de la modal
     window.addEventListener("click", function(event) {
         if (event.target === modal) {
+
+            // Code de remise à zéro de l'aperçu de l'image
+            const imagePreview = document.getElementById("preview-img"); // Idéalement, donner un id à l'élément img de prévisualisation
+            imagePreview.classList.add("masked");
+
+            imagePreview.src = ""; // Réinitialiser la source de l'image de prévisualisation
+            const previewplaceholder = document.getElementById("preview-placeholder");
+            previewplaceholder.classList.remove("masked"); // Affiche
+
+            const addButton = document.getElementById("btn-add");
+            const textfileinput = document.getElementById("textFileInput")
+            
+            addButton.classList.remove("masked");
+            textfileinput.classList.remove("hidden");
+            
             closeModal(id);
         }
+        
     });
 
     // Sélection du bouton "Valider"
@@ -159,10 +187,11 @@ const handleSubmit = function(event) {
     addProject(formData).then(() => {
         form.reset();
 
-            // Code de remise à zéro de l'aperçu de l'image
+        // Code de remise à zéro de l'aperçu de l'image
         const imagePreview = document.getElementById("preview-img"); // Idéalement, donner un id à l'élément img de prévisualisation
         imagePreview.classList.add("masked");
 
+        imagePreview.src = ""; // Réinitialiser la source de l'image de prévisualisation
         const previewplaceholder = document.getElementById("preview-placeholder");
         previewplaceholder.classList.remove("masked"); // Affiche
 
@@ -274,7 +303,6 @@ document.addEventListener("DOMContentLoaded", function() {
     titleInput.addEventListener("input", updateButtonState); // Événement lors de la saisie dans le champ de titre
     categorySelect.addEventListener("change", updateButtonState); // Événement lors de la sélection d'une catégorie
     fileInput.addEventListener("change", updateButtonState); // Événement lors du chargement d'une image
-    
     // Initialiser l'état du bouton et vérifier les champs au chargement de la page
     updateButtonState();
 });
